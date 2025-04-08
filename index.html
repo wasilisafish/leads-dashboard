@@ -396,6 +396,75 @@
             background-color: #ccc;
             cursor: not-allowed;
         }
+
+        /* Filter Styles - Multiselect */
+        .filter-multiselect-container {
+            position: relative;
+            flex: 1;
+        }
+
+        .filter-multiselect-display {
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filter-multiselect-display::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+        }
+
+        .filter-multiselect {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            z-index: 10;
+            display: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-multiselect.active {
+            display: block;
+        }
+
+        .filter-multiselect-option {
+            padding: 8px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .filter-multiselect-option:hover {
+            background-color: #f5f5f5;
+        }
+
+        .filter-multiselect-option input {
+            margin-right: 8px;
+        }
+
+        .date-picker {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: white;
+        }
     </style>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
@@ -760,9 +829,9 @@
             <button class="popover-close" id="closePopover">&times;</button>
         </div>
         <div class="popover-body">
-            <div class="filter-row">
+            <div class="filter-row" id="assigneeFilterRow">
                 <select class="filter-select filter-option">
-                    <option value="assignee">Assignee</option>
+                    <option value="assignee" selected>Assignee</option>
                     <option value="leadMode">Lead Mode</option>
                     <option value="disposition">Disposition</option>
                     <option value="createdAt">Created at</option>
@@ -774,20 +843,44 @@
                     <option value="proposal">Proposal</option>
                 </select>
                 <select class="filter-select filter-operator">
-                    <option value="" selected disabled>Select operator</option>
+                    <option value="" disabled>Select operator</option>
+                    <option value="equals" selected>Equals</option>
+                    <option value="notEquals">Not Equals</option>
                 </select>
-                <select class="filter-select filter-value">
-                    <option value="" selected disabled>Select value</option>
-                </select>
+                <div class="filter-multiselect-container">
+                    <div class="filter-multiselect-display">Me</div>
+                    <div class="filter-multiselect">
+                        <div class="filter-multiselect-option">
+                            <input type="checkbox" value="me" data-text="Me" checked>
+                            <span>Me</span>
+                        </div>
+                        <div class="filter-multiselect-option">
+                            <input type="checkbox" value="johnSmith" data-text="John Smith">
+                            <span>John Smith</span>
+                        </div>
+                        <div class="filter-multiselect-option">
+                            <input type="checkbox" value="emmaJohnson" data-text="Emma Johnson">
+                            <span>Emma Johnson</span>
+                        </div>
+                        <div class="filter-multiselect-option">
+                            <input type="checkbox" value="michaelWilliams" data-text="Michael Williams">
+                            <span>Michael Williams</span>
+                        </div>
+                        <div class="filter-multiselect-option">
+                            <input type="checkbox" value="oliviaBrown" data-text="Olivia Brown">
+                            <span>Olivia Brown</span>
+                        </div>
+                    </div>
+                </div>
                 <button class="filter-remove">
                     <i class="fas fa-trash-alt"></i>
                 </button>
             </div>
 
-            <div class="filter-row">
+            <div class="filter-row" id="leadModeFilterRow">
                 <select class="filter-select filter-option">
-                    <option value="leadMode">Lead Mode</option>
                     <option value="assignee">Assignee</option>
+                    <option value="leadMode" selected>Lead Mode</option>
                     <option value="disposition">Disposition</option>
                     <option value="createdAt">Created at</option>
                     <option value="lastInteracted">Last Interacted</option>
@@ -798,11 +891,27 @@
                     <option value="proposal">Proposal</option>
                 </select>
                 <select class="filter-select filter-operator">
-                    <option value="" selected disabled>Select operator</option>
+                    <option value="" disabled>Select operator</option>
+                    <option value="equals" selected>Equals</option>
+                    <option value="notEquals">Not Equals</option>
                 </select>
-                <select class="filter-select filter-value">
-                    <option value="" selected disabled>Select value</option>
-                </select>
+                <div class="filter-multiselect-container">
+                    <div class="filter-multiselect-display">Regular</div>
+                    <div class="filter-multiselect">
+                        <div class="filter-multiselect-option">
+                            <input type="checkbox" value="regular" data-text="Regular" checked>
+                            <span>Regular</span>
+                        </div>
+                        <div class="filter-multiselect-option">
+                            <input type="checkbox" value="test" data-text="Test">
+                            <span>Test</span>
+                        </div>
+                        <div class="filter-multiselect-option">
+                            <input type="checkbox" value="johnDoe" data-text="John Doe">
+                            <span>John Doe</span>
+                        </div>
+                    </div>
+                </div>
                 <button class="filter-remove">
                     <i class="fas fa-trash-alt"></i>
                 </button>
@@ -845,9 +954,10 @@
         function updateFilterValueOptions(row) {
             const optionSelect = row.querySelector('.filter-option');
             const operatorSelect = row.querySelector('.filter-operator');
-            const valueSelect = row.querySelector('.filter-value');
+            let valueSelect = row.querySelector('.filter-value');
+            let multiselectContainer = row.querySelector('.filter-multiselect-container');
 
-            if (!optionSelect || !operatorSelect || !valueSelect) return;
+            if (!optionSelect || !operatorSelect) return;
 
             const option = optionSelect.value;
             const operator = operatorSelect.value;
@@ -855,42 +965,60 @@
             // If no operator is selected, don't update value options
             if (!operator) return;
 
-            // Clear current options
-            valueSelect.innerHTML = '';
+            // Remove existing multiselect container if it exists
+            if (multiselectContainer) {
+                multiselectContainer.remove();
+            }
 
             // Handle filters that don't need a value select for certain operators
             if ((option === 'proposal' && (operator === 'isEmpty' || operator === 'isNotEmpty')) ||
                 (operator === 'isEmpty' && (option === 'partner' || option === 'cadenceType'))) {
-                valueSelect.style.display = 'none';
+
+                if (valueSelect) {
+                    valueSelect.style.display = 'none';
+                }
                 return;
-            }
-
-            // For all other filters, show the value select
-            valueSelect.style.display = 'block';
-
-            // Add default placeholder option
-            if ((option !== 'createdAt' && option !== 'lastInteracted') ||
-                (operator !== 'before' && operator !== 'after' && operator !== 'equals')) {
-                const defaultOption = document.createElement('option');
-                defaultOption.value = '';
-                defaultOption.textContent = 'Select value';
-                defaultOption.selected = true;
-                defaultOption.disabled = true;
-                valueSelect.appendChild(defaultOption);
             }
 
             // Handle date pickers for created at and last interacted
             if ((option === 'createdAt' || option === 'lastInteracted') &&
                 (operator === 'before' || operator === 'after' || operator === 'equals')) {
-                // Replace the select with a date input
+
+                // Create a date input
                 const dateInput = document.createElement('input');
                 dateInput.type = 'date';
-                dateInput.className = 'filter-select';
+                dateInput.className = 'date-picker';
 
-                // Replace the select element with the date input
-                valueSelect.parentNode.replaceChild(dateInput, valueSelect);
+                // Replace the value select with the date input
+                if (valueSelect) {
+                    valueSelect.parentNode.replaceChild(dateInput, valueSelect);
+                } else {
+                    // If valueSelect doesn't exist, just add the dateInput
+                    const operatorEl = row.querySelector('.filter-operator');
+                    const removeBtn = row.querySelector('.filter-remove');
+                    row.insertBefore(dateInput, removeBtn);
+                }
                 return;
             }
+
+            // For all other filters, create a multiselect component
+            // First, remove the existing value select if it exists
+            if (valueSelect) {
+                valueSelect.remove();
+            }
+
+            // Create multiselect container
+            multiselectContainer = document.createElement('div');
+            multiselectContainer.className = 'filter-multiselect-container';
+
+            // Create display element
+            const multiselectDisplay = document.createElement('div');
+            multiselectDisplay.className = 'filter-multiselect-display';
+            multiselectDisplay.textContent = 'Select value';
+
+            // Create multiselect dropdown
+            const multiselect = document.createElement('div');
+            multiselect.className = 'filter-multiselect';
 
             // Set options based on the selected filter
             let options = [];
@@ -898,6 +1026,7 @@
             switch (option) {
                 case 'assignee':
                     options = [
+                        { value: 'me', text: 'Me' },
                         { value: 'johnSmith', text: 'John Smith' },
                         { value: 'emmaJohnson', text: 'Emma Johnson' },
                         { value: 'michaelWilliams', text: 'Michael Williams' },
@@ -922,8 +1051,8 @@
                     break;
                 case 'leadMode':
                     options = [
-                        { value: 'test', text: 'Test' },
                         { value: 'regular', text: 'Regular' },
+                        { value: 'test', text: 'Test' },
                         { value: 'johnDoe', text: 'John Doe' }
                     ];
                     break;
@@ -1029,20 +1158,89 @@
                     options = [{ value: 'default', text: 'Select a value' }];
             }
 
-            // Add options to the select
+            // Add options to the multiselect dropdown
             options.forEach(opt => {
-                const optionEl = document.createElement('option');
-                optionEl.value = opt.value;
-                optionEl.textContent = opt.text;
-                valueSelect.appendChild(optionEl);
+                const optionEl = document.createElement('div');
+                optionEl.className = 'filter-multiselect-option';
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = opt.value;
+                checkbox.dataset.text = opt.text;
+
+                const label = document.createElement('span');
+                label.textContent = opt.text;
+
+                optionEl.appendChild(checkbox);
+                optionEl.appendChild(label);
+                multiselect.appendChild(optionEl);
             });
+
+            // Add click event to display to toggle dropdown
+            multiselectDisplay.addEventListener('click', (e) => {
+                e.stopPropagation();
+
+                // Close all other open multiselects first
+                document.querySelectorAll('.filter-multiselect.active').forEach(ms => {
+                    if (ms !== multiselect) {
+                        ms.classList.remove('active');
+                    }
+                });
+
+                multiselect.classList.toggle('active');
+            });
+
+            // Add click event to checkboxes to update display
+            multiselect.addEventListener('click', (e) => {
+                if (e.target.tagName === 'INPUT' || e.target.parentNode.classList.contains('filter-multiselect-option')) {
+                    e.stopPropagation();
+
+                    // If clicking on the label, toggle the checkbox
+                    if (e.target.tagName !== 'INPUT') {
+                        const checkbox = e.target.parentNode.querySelector('input[type="checkbox"]');
+                        if (checkbox) {
+                            checkbox.checked = !checkbox.checked;
+                        }
+                    }
+
+                    updateMultiselectDisplay(multiselectDisplay, multiselect);
+                }
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!multiselectContainer.contains(e.target)) {
+                    multiselect.classList.remove('active');
+                }
+            });
+
+            // Assemble the multiselect component
+            multiselectContainer.appendChild(multiselectDisplay);
+            multiselectContainer.appendChild(multiselect);
+
+            // Add multiselect to the filter row
+            const operatorEl = row.querySelector('.filter-operator');
+            const removeBtn = row.querySelector('.filter-remove');
+            row.insertBefore(multiselectContainer, removeBtn);
+        }
+
+        // Helper function to update multiselect display
+        function updateMultiselectDisplay(displayEl, multiselectEl) {
+            const checkboxes = multiselectEl.querySelectorAll('input[type="checkbox"]:checked');
+
+            if (checkboxes.length === 0) {
+                displayEl.textContent = 'Select value';
+            } else if (checkboxes.length === 1) {
+                displayEl.textContent = checkboxes[0].dataset.text;
+            } else {
+                displayEl.textContent = `${checkboxes.length} selected`;
+            }
         }
 
         // Update operators based on the selected filter
         function updateOperatorOptions(row) {
             const optionSelect = row.querySelector('.filter-option');
             const operatorSelect = row.querySelector('.filter-operator');
-            const valueSelect = row.querySelector('.filter-value');
 
             if (!optionSelect || !operatorSelect) return;
 
@@ -1055,20 +1253,8 @@
             const defaultOption = document.createElement('option');
             defaultOption.value = '';
             defaultOption.textContent = 'Select operator';
-            defaultOption.selected = true;
             defaultOption.disabled = true;
             operatorSelect.appendChild(defaultOption);
-
-            // Also reset the value select if it exists
-            if (valueSelect) {
-                valueSelect.innerHTML = '';
-                const defaultValueOption = document.createElement('option');
-                defaultValueOption.value = '';
-                defaultValueOption.textContent = 'Select value';
-                defaultValueOption.selected = true;
-                defaultValueOption.disabled = true;
-                valueSelect.appendChild(defaultValueOption);
-            }
 
             // Set operators based on selected filter
             let operators = [];
@@ -1121,130 +1307,199 @@
                 operatorSelect.appendChild(optionEl);
             });
 
-            // Don't automatically update value options until operator is selected
-            // The event listener for operator change will handle this
+            // Select equals by default
+            operatorSelect.value = 'equals';
         }
 
-        // Initialize filter options
-        document.querySelectorAll('.filter-row').forEach(row => {
-            // Set up event listeners for the option select
-            const optionSelect = row.querySelector('.filter-option');
-            if (optionSelect) {
-                optionSelect.addEventListener('change', () => {
-                    updateOperatorOptions(row);
-                });
-            }
-
-            // Set up event listeners for the operator select
-            const operatorSelect = row.querySelector('.filter-operator');
-            if (operatorSelect) {
-                operatorSelect.addEventListener('change', () => {
-                    updateFilterValueOptions(row);
-                });
-            }
-
-            // Initialize operator options only
-            updateOperatorOptions(row);
-        });
-
-        // Add filter button functionality
-        addFilterBtn.addEventListener('click', () => {
-            const newFilterRow = document.createElement('div');
-            newFilterRow.className = 'filter-row';
-
-            newFilterRow.innerHTML = `
-                <select class="filter-select filter-option">
-                    <option value="assignee">Assignee</option>
-                    <option value="leadMode">Lead Mode</option>
-                    <option value="disposition">Disposition</option>
-                    <option value="createdAt">Created at</option>
-                    <option value="lastInteracted">Last Interacted</option>
-                    <option value="residentialState">Residential State</option>
-                    <option value="businessType">Business type</option>
-                    <option value="partner">Partner</option>
-                    <option value="cadenceType">Cadence type</option>
-                    <option value="proposal">Proposal</option>
-                </select>
-                <select class="filter-select filter-operator">
-                    <option value="" selected disabled>Select operator</option>
-                    <!-- Will be populated dynamically -->
-                </select>
-                <select class="filter-select filter-value">
-                    <option value="" selected disabled>Select value</option>
-                    <!-- Will be populated dynamically -->
-                </select>
-                <button class="filter-remove">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
-            `;
-
-            popoverBody.insertBefore(newFilterRow, addFilterBtn);
-
-            // Add event listener to the remove button
-            const removeBtn = newFilterRow.querySelector('.filter-remove');
-            removeBtn.addEventListener('click', () => {
-                newFilterRow.remove();
-            });
-
-            // Set up event listeners for the new row
-            const optionSelect = newFilterRow.querySelector('.filter-option');
-            if (optionSelect) {
-                optionSelect.addEventListener('change', () => {
-                    updateOperatorOptions(newFilterRow);
-                });
-            }
-
-            const operatorSelect = newFilterRow.querySelector('.filter-operator');
-            if (operatorSelect) {
-                operatorSelect.addEventListener('change', () => {
-                    updateFilterValueOptions(newFilterRow);
-                });
-            }
-
-            // Initialize the options (operators only)
-            updateOperatorOptions(newFilterRow);
-        });
-
-        // Remove filter functionality
-        const removeButtons = document.querySelectorAll('.filter-remove');
-        removeButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                btn.closest('.filter-row').remove();
-            });
-        });
-
-        // Clear all filters
-        const clearBtn = document.querySelector('.clear-btn');
-        clearBtn.addEventListener('click', () => {
-            const filterRows = document.querySelectorAll('.filter-row');
-            filterRows.forEach((row, index) => {
-                if (index > 0) {
-                    row.remove();
-                }
-            });
-
-            // Reset the first row
-            const firstRow = document.querySelector('.filter-row');
-            if (firstRow) {
-                const optionSelect = firstRow.querySelector('.filter-option');
+        // Initialize filter options and set default values
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up event listeners for existing filter rows
+            document.querySelectorAll('.filter-row').forEach(row => {
+                // Set up event listeners for the option select
+                const optionSelect = row.querySelector('.filter-option');
                 if (optionSelect) {
-                    optionSelect.value = 'assignee';
-                    updateOperatorOptions(firstRow);
+                    optionSelect.addEventListener('change', () => {
+                        updateOperatorOptions(row);
+                        // When option changes, update the operator and then the value options
+                        const operatorSelect = row.querySelector('.filter-operator');
+                        if (operatorSelect && operatorSelect.value) {
+                            updateFilterValueOptions(row);
+                        }
+                    });
                 }
-            }
-        });
 
-        // Apply filters
-        const applyBtn = document.querySelector('.apply-btn');
-        applyBtn.addEventListener('click', () => {
-            // Here you would normally collect all filter values and apply them
-            // For demo purposes, we'll just close the popover
-            filtersPopover.classList.remove('active');
+                // Set up event listeners for the operator select
+                const operatorSelect = row.querySelector('.filter-operator');
+                if (operatorSelect) {
+                    operatorSelect.addEventListener('change', () => {
+                        updateFilterValueOptions(row);
+                    });
+                }
+            });
 
-            // Update the filter badge count
-            const filterBadge = document.querySelector('.filter-badge');
-            const filterCount = document.querySelectorAll('.filter-row').length;
-            filterBadge.textContent = filterCount;
+            // Add filter button functionality
+            addFilterBtn.addEventListener('click', () => {
+                const newFilterRow = document.createElement('div');
+                newFilterRow.className = 'filter-row';
+
+                newFilterRow.innerHTML = `
+                    <select class="filter-select filter-option">
+                        <option value="assignee">Assignee</option>
+                        <option value="leadMode">Lead Mode</option>
+                        <option value="disposition">Disposition</option>
+                        <option value="createdAt">Created at</option>
+                        <option value="lastInteracted">Last Interacted</option>
+                        <option value="residentialState">Residential State</option>
+                        <option value="businessType">Business type</option>
+                        <option value="partner">Partner</option>
+                        <option value="cadenceType">Cadence type</option>
+                        <option value="proposal">Proposal</option>
+                    </select>
+                    <select class="filter-select filter-operator">
+                        <option value="" selected disabled>Select operator</option>
+                    </select>
+                    <button class="filter-remove">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                `;
+
+                popoverBody.insertBefore(newFilterRow, addFilterBtn);
+
+                // Add event listener to the remove button
+                const removeBtn = newFilterRow.querySelector('.filter-remove');
+                removeBtn.addEventListener('click', () => {
+                    newFilterRow.remove();
+                });
+
+                // Set up event listeners for the new row
+                const optionSelect = newFilterRow.querySelector('.filter-option');
+                if (optionSelect) {
+                    optionSelect.addEventListener('change', () => {
+                        updateOperatorOptions(newFilterRow);
+                    });
+                }
+
+                const operatorSelect = newFilterRow.querySelector('.filter-operator');
+                if (operatorSelect) {
+                    operatorSelect.addEventListener('change', () => {
+                        updateFilterValueOptions(newFilterRow);
+                    });
+                }
+
+                // Initialize the options (operators only)
+                updateOperatorOptions(newFilterRow);
+            });
+
+            // Remove filter functionality
+            document.querySelectorAll('.filter-remove').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.closest('.filter-row').remove();
+                });
+            });
+
+            // Clear all filters
+            const clearBtn = document.querySelector('.clear-btn');
+            clearBtn.addEventListener('click', () => {
+                // Remove all but the first row
+                const filterRows = document.querySelectorAll('.filter-row');
+                filterRows.forEach((row, index) => {
+                    if (index > 1) { // Keep the first 2 default rows
+                        row.remove();
+                    }
+                });
+
+                // Reset the first two rows to their default values
+                const assigneeRow = document.getElementById('assigneeFilterRow');
+                if (assigneeRow) {
+                    const optionSelect = assigneeRow.querySelector('.filter-option');
+                    if (optionSelect) {
+                        optionSelect.value = 'assignee';
+
+                        const operatorSelect = assigneeRow.querySelector('.filter-operator');
+                        if (operatorSelect) {
+                            operatorSelect.value = 'equals';
+                        }
+
+                        // Reset the multiselect
+                        const multiselectDisplay = assigneeRow.querySelector('.filter-multiselect-display');
+                        if (multiselectDisplay) {
+                            multiselectDisplay.textContent = 'Me';
+                        }
+
+                        const checkboxes = assigneeRow.querySelectorAll('.filter-multiselect-option input[type="checkbox"]');
+                        checkboxes.forEach(cb => {
+                            cb.checked = cb.value === 'me';
+                        });
+                    }
+                }
+
+                const leadModeRow = document.getElementById('leadModeFilterRow');
+                if (leadModeRow) {
+                    const optionSelect = leadModeRow.querySelector('.filter-option');
+                    if (optionSelect) {
+                        optionSelect.value = 'leadMode';
+
+                        const operatorSelect = leadModeRow.querySelector('.filter-operator');
+                        if (operatorSelect) {
+                            operatorSelect.value = 'equals';
+                        }
+
+                        // Reset the multiselect
+                        const multiselectDisplay = leadModeRow.querySelector('.filter-multiselect-display');
+                        if (multiselectDisplay) {
+                            multiselectDisplay.textContent = 'Regular';
+                        }
+
+                        const checkboxes = leadModeRow.querySelectorAll('.filter-multiselect-option input[type="checkbox"]');
+                        checkboxes.forEach(cb => {
+                            cb.checked = cb.value === 'regular';
+                        });
+                    }
+                }
+            });
+
+            // Apply filters
+            const applyBtn = document.querySelector('.apply-btn');
+            applyBtn.addEventListener('click', () => {
+                // Collect all filter values
+                const filters = [];
+                document.querySelectorAll('.filter-row').forEach(row => {
+                    const filter = {};
+
+                    filter.type = row.querySelector('.filter-option').value;
+                    filter.operator = row.querySelector('.filter-operator').value;
+
+                    // Get selected values from multiselect if it exists
+                    const multiselectContainer = row.querySelector('.filter-multiselect-container');
+                    if (multiselectContainer) {
+                        const checkboxes = multiselectContainer.querySelectorAll('input[type="checkbox"]:checked');
+                        filter.values = Array.from(checkboxes).map(cb => cb.value);
+                    }
+
+                    // Get value from date picker if it exists
+                    const datePicker = row.querySelector('.date-picker');
+                    if (datePicker) {
+                        filter.value = datePicker.value;
+                    }
+
+                    // Add filter if it has all required fields
+                    if (filter.type && filter.operator &&
+                        ((filter.values && filter.values.length > 0) ||
+                         filter.value ||
+                         filter.operator === 'isEmpty' ||
+                         filter.operator === 'isNotEmpty')) {
+                        filters.push(filter);
+                    }
+                });
+
+                // For demo purposes, just log the filters and close the popover
+                console.log('Applied filters:', filters);
+                filtersPopover.classList.remove('active');
+
+                // Update the filter badge count - only count valid filters
+                const filterBadge = document.querySelector('.filter-badge');
+                filterBadge.textContent = filters.length || 0;
+            });
         });
     </script>
 </body>
